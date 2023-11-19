@@ -10,6 +10,7 @@ import DetailMatchSetting from 'src/pages/MatchSettings/DetailMatchSetting'
 import ListMatchSetting from 'src/pages/MatchSettings/ListMatchSetting'
 import ListPromotions from 'src/pages/Promotions'
 import AddPromotion from 'src/pages/Promotions/Add'
+import AddPromotionRenew from 'src/pages/Promotions/AddReNew'
 import DetailPromotion from 'src/pages/Promotions/detail'
 import ListQuest from 'src/pages/Quest'
 import AddQuest from 'src/pages/Quest/Add'
@@ -88,6 +89,11 @@ const coreRoutes: any[] = [
     path: '/promotions/add',
     title: 'Promotions',
     component: AddPromotion
+  },
+  {
+    path: '/promotions/add-renew',
+    title: 'Promotions',
+    component: AddPromotionRenew
   },
   {
     path: '/promotions/:id',

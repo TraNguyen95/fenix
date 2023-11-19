@@ -11,7 +11,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { useContext, useEffect, useState } from 'react'
 import rankTierApi from 'src/apis/rankTier.api'
 import { AppContext } from 'src/contexts/app.context'
-import { Helmet } from 'react-helmet'
+import { Helmet, HelmetProvider } from 'react-helmet-async'
 
 const ROUND_TYPE = [
   { name: 'WAITING', value: 'WAITING' },
@@ -69,11 +69,15 @@ export default function DetailMatchSetting() {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <Helmet>
-        <meta charSet='utf-8' />
-        <title>Edit Match Setting</title>
-        <link rel='canonical' href='' />
-      </Helmet>
+      <HelmetProvider>
+        <div>
+          <Helmet>
+            <meta charSet='utf-8' />
+            <title>Edit Match Setting</title>
+            <link rel='canonical' href='' />
+          </Helmet>
+        </div>
+      </HelmetProvider>
       {/* start  */}
       <div className='flex flex-col gap-9'>
         <div className='rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark'>

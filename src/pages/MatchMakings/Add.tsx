@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { Helmet } from 'react-helmet';
+import { Helmet, HelmetProvider } from 'react-helmet-async';
 import { useForm, useFieldArray } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -32,87 +32,81 @@ function AddMatchMaking() {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <Helmet>
-        <meta charSet="utf-8" />
-        <title>Add Match Making</title>
-        <link rel="canonical" href="" />
-      </Helmet>
-      <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
-        <div className="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
-          <h3 className="font-medium text-black dark:text-white">Add</h3>
+      <HelmetProvider>
+        <div>
+          <Helmet>
+            <meta charSet='utf-8' />
+            <title>Add Match Making</title>
+            <link rel='canonical' href='' />
+          </Helmet>
         </div>
-        <div className="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
-          <label className="mb-3 block text-black dark:text-white font-semibold">
-            Tier Weight:
-          </label>
+      </HelmetProvider>
+      <div className='rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark'>
+        <div className='border-b border-stroke py-4 px-6.5 dark:border-strokedark'>
+          <h3 className='font-medium text-black dark:text-white'>Add</h3>
+        </div>
+        <div className='border-b border-stroke py-4 px-6.5 dark:border-strokedark'>
+          <label className='mb-3 block font-semibold text-black dark:text-white'>Tier Weight:</label>
           <Input
             className={inputCustom}
             register={register}
-            name="tierWeight"
+            name='tierWeight'
             rules={getRules().tierWeight}
             errorMessage={errors.tierWeight?.message}
           />
         </div>
 
-        <div className="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
-          <label className="mb-3 block text-black dark:text-white font-semibold">
-            Medal Weight:
-          </label>
+        <div className='border-b border-stroke py-4 px-6.5 dark:border-strokedark'>
+          <label className='mb-3 block font-semibold text-black dark:text-white'>Medal Weight:</label>
           <Input
             className={inputCustom}
             register={register}
-            name="medalWeight"
+            name='medalWeight'
             rules={getRules().tierWeight}
             errorMessage={errors.medalWeight?.message}
           />
         </div>
 
-        <div className="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
-          <label className="mb-3 block text-black dark:text-white font-semibold">
-            WinLoss Weight:
-          </label>
+        <div className='border-b border-stroke py-4 px-6.5 dark:border-strokedark'>
+          <label className='mb-3 block font-semibold text-black dark:text-white'>WinLoss Weight:</label>
           <Input
             className={inputCustom}
             register={register}
-            name="winLossWeight"
+            name='winLossWeight'
             rules={getRules().tierWeight}
             errorMessage={errors.winLossWeight?.message}
-            type="number"
+            type='number'
           />
         </div>
-        <div className="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
-          <label className="mb-3 block text-black dark:text-white font-semibold">
-            Point Range:
-          </label>
+        <div className='border-b border-stroke py-4 px-6.5 dark:border-strokedark'>
+          <label className='mb-3 block font-semibold text-black dark:text-white'>Point Range:</label>
           <Input
             className={inputCustom}
             register={register}
-            name="pointRange"
+            name='pointRange'
             rules={getRules().tierWeight}
             errorMessage={errors.pointRange?.message}
-            type="number"
+            type='number'
           />
         </div>
-        <div className="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
-          <label className="mb-3 block text-black dark:text-white font-semibold">
-            Time To Up Range:
-          </label>
+        <div className='border-b border-stroke py-4 px-6.5 dark:border-strokedark'>
+          <label className='mb-3 block font-semibold text-black dark:text-white'>Time To Up Range:</label>
           <Input
             className={inputCustom}
             register={register}
-            name="timeToUpRange"
+            name='timeToUpRange'
             rules={getRules().timeToUpRange}
             errorMessage={errors.timeToUpRange?.message}
-            type="number"
+            type='number'
           />
         </div>
       </div>
       <input
-        type="submit"
-        className="mt-2 cursor-pointer inline-flex items-center justify-center bg-primary py-4 px-10 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10"
+        type='submit'
+        className='mt-2 inline-flex cursor-pointer items-center justify-center bg-primary py-4 px-10 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10'
       />
     </form>
-  );
+  )
 }
 
 export default AddMatchMaking;

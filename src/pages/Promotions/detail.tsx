@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from 'react'
-import { Helmet } from 'react-helmet'
+import { Helmet, HelmetProvider } from 'react-helmet-async'
 import { useForm, useFieldArray } from 'react-hook-form'
 import { useNavigate, useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
@@ -91,11 +91,15 @@ function DetailPromotion() {
   console.log(errors)
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <Helmet>
-        <meta charSet='utf-8' />
-        <title>Detail Promotion Packages</title>
-        <link rel='canonical' href='' />
-      </Helmet>
+      <HelmetProvider>
+        <div>
+          <Helmet>
+            <meta charSet='utf-8' />
+            <title>Detail Promotion Packages</title>
+            <link rel='canonical' href='' />
+          </Helmet>
+        </div>
+      </HelmetProvider>
       <div className='rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark'>
         <div className='border-b border-stroke py-4 px-6.5 dark:border-strokedark'>
           <h3 className='font-medium text-black dark:text-white'>Detail</h3>

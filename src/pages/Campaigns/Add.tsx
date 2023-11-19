@@ -1,5 +1,5 @@
 import { useContext } from 'react'
-import { Helmet } from 'react-helmet'
+import { HelmetProvider, Helmet } from 'react-helmet-async'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
@@ -35,11 +35,15 @@ function AddCampaign() {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <Helmet>
-        <meta charSet='utf-8' />
-        <title>Add Campaigns</title>
-        <link rel='canonical' href='' />
-      </Helmet>
+      <HelmetProvider>
+        <div>
+          <Helmet>
+            <meta charSet='utf-8' />
+            <title>Add Campaigns</title>
+            <link rel='canonical' href='' />
+          </Helmet>
+        </div>
+      </HelmetProvider>
       <div className='rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark'>
         <div className='border-b border-stroke py-4 px-6.5 dark:border-strokedark'>
           <h3 className='font-medium text-black dark:text-white'>Add</h3>

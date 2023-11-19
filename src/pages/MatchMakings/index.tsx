@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from 'react'
-import { Helmet } from 'react-helmet'
+import { Helmet, HelmetProvider } from 'react-helmet-async'
 import { toast } from 'react-toastify'
 import { Link, useSearchParams } from 'react-router-dom'
 import matchMakingApi from 'src/apis/matchMaking.api'
@@ -63,16 +63,20 @@ const TableMatchMaking = (props: any) => {
     props.setIsDelete(!props.isDelete)
   }
   return (
-    <div className='border-stroke shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 rounded-sm border bg-white px-5 pt-6 pb-2.5 xl:pb-1'>
-      <Helmet>
-        <meta charSet='utf-8' />
-        <title>List Match Making</title>
-        <link rel='canonical' href='' />
-      </Helmet>
+    <div className='rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1'>
+      <HelmetProvider>
+        <div>
+          <Helmet>
+            <meta charSet='utf-8' />
+            <title>List Match Making</title>
+            <link rel='canonical' href='' />
+          </Helmet>
+        </div>
+      </HelmetProvider>
       <div className='max-w-full overflow-x-auto'>
         <table className='w-full table-auto'>
           <thead>
-            <tr className='bg-gray-2 dark:bg-meta-4 text-left'>
+            <tr className='bg-gray-2 text-left dark:bg-meta-4'>
               <th className='min-w-[220px] py-4 px-4 font-medium font-semibold text-black dark:text-white xl:pl-11'>
                 Tier Weight
               </th>
@@ -98,28 +102,28 @@ const TableMatchMaking = (props: any) => {
             {props.list?.map((item: any, index: number) => {
               return (
                 <tr key={item._id}>
-                  <td className='dark:border-strokedark border-b border-[#eee] py-5 px-4 pl-9 xl:pl-11'>
-                    <p className='bg-success text-success inline-flex rounded-full bg-opacity-10 py-1 px-3 text-sm font-medium'>
+                  <td className='border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11'>
+                    <p className='inline-flex rounded-full bg-success bg-opacity-10 py-1 px-3 text-sm font-medium text-success'>
                       {item.tierWeight}
                     </p>
                   </td>
-                  <td className='dark:border-strokedark border-b border-[#eee] py-5 px-4 pl-9 xl:pl-11'>
-                    <p className='bg-success text-success inline-flex rounded-full bg-opacity-10 py-1 px-3 text-sm font-medium'>
+                  <td className='border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11'>
+                    <p className='inline-flex rounded-full bg-success bg-opacity-10 py-1 px-3 text-sm font-medium text-success'>
                       {item.medalWeight}
                     </p>
                   </td>
-                  <td className='dark:border-strokedark border-b border-[#eee] py-5 px-4'>
-                    <p className='bg-success text-success inline-flex rounded-full bg-opacity-10 py-1 px-3 text-sm font-medium'>
+                  <td className='border-b border-[#eee] py-5 px-4 dark:border-strokedark'>
+                    <p className='inline-flex rounded-full bg-success bg-opacity-10 py-1 px-3 text-sm font-medium text-success'>
                       {item.winLossWeight}
                     </p>
                   </td>
-                  <td className='dark:border-strokedark border-b border-[#eee] py-5 px-4'>
-                    <p className='bg-success text-success inline-flex rounded-full bg-opacity-10 py-1 px-3 text-sm font-medium'>
+                  <td className='border-b border-[#eee] py-5 px-4 dark:border-strokedark'>
+                    <p className='inline-flex rounded-full bg-success bg-opacity-10 py-1 px-3 text-sm font-medium text-success'>
                       {item.pointRange}
                     </p>
                   </td>
-                  <td className='dark:border-strokedark border-b border-[#eee] py-5 px-4'>
-                    <p className='bg-success text-success inline-flex rounded-full bg-opacity-10 py-1 px-3 text-sm font-medium'>
+                  <td className='border-b border-[#eee] py-5 px-4 dark:border-strokedark'>
+                    <p className='inline-flex rounded-full bg-success bg-opacity-10 py-1 px-3 text-sm font-medium text-success'>
                       {item.timeToUpRange}
                     </p>
                   </td>
@@ -128,7 +132,7 @@ const TableMatchMaking = (props: any) => {
                       {item.createdAt}
                     </p>
                   </td> */}
-                  <td className='dark:border-strokedark border-b border-[#eee] py-5 px-4'>
+                  <td className='border-b border-[#eee] py-5 px-4 dark:border-strokedark'>
                     <div className='flex items-center space-x-3.5'>
                       <Link to={`${item._id}`} className='hover:text-primary'>
                         <svg
@@ -175,7 +179,7 @@ const TableMatchMaking = (props: any) => {
             <li>
               <a
                 href='#'
-                className='ml-0 flex h-8 items-center justify-center rounded-l-lg border border-gray-300 bg-white px-3 leading-tight text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white'
+                className='border-gray-300 text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 ml-0 flex h-8 items-center justify-center rounded-l-lg border bg-white px-3 leading-tight dark:hover:text-white'
               >
                 Previous
               </a>
@@ -189,7 +193,7 @@ const TableMatchMaking = (props: any) => {
                       onClick={() => handlePage(index + 1)}
                       className={
                         (props.currentPage == index + 1 ? 'border-[#3b50e0] bg-[#3b50e0] text-[#fff]' : '') +
-                        ' flex h-8 items-center justify-center border border-gray-300 px-3 leading-tight text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white'
+                        ' border-gray-300 text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 flex h-8 items-center justify-center border px-3 leading-tight dark:hover:text-white'
                       }
                     >
                       {index + 1}
@@ -200,7 +204,7 @@ const TableMatchMaking = (props: any) => {
             <li>
               <a
                 href='#'
-                className='flex h-8 items-center justify-center rounded-r-lg border border-gray-300 bg-white px-3 leading-tight text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white'
+                className='border-gray-300 text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 flex h-8 items-center justify-center rounded-r-lg border bg-white px-3 leading-tight dark:hover:text-white'
               >
                 Next
               </a>

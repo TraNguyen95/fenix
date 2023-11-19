@@ -11,7 +11,7 @@ import { useContext, useEffect, useState } from 'react'
 import rankTierApi from 'src/apis/rankTier.api'
 import { useNavigate } from 'react-router-dom'
 import { AppContext } from 'src/contexts/app.context'
-import { Helmet } from 'react-helmet'
+import { Helmet, HelmetProvider } from 'react-helmet-async'
 
 const ROUND_TYPE = [
   { name: 'WAITING', value: 'WAITING' },
@@ -88,15 +88,19 @@ export default function AddMatchSetting() {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <Helmet>
-        <meta charSet='utf-8' />
-        <title>Add Match Setting</title>
-        <link rel='canonical' href='' />
-      </Helmet>
+      <HelmetProvider>
+        <div>
+          <Helmet>
+            <meta charSet='utf-8' />
+            <title>Add Match Setting</title>
+            <link rel='canonical' href='' />
+          </Helmet>
+        </div>
+      </HelmetProvider>
       {/* start  */}
       <div className='flex flex-col gap-9'>
-        <div className='border-stroke shadow-default dark:border-strokedark dark:bg-boxdark rounded-sm border bg-white'>
-          <div className='border-stroke px-6.5 dark:border-strokedark border-b py-4'>
+        <div className='rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark'>
+          <div className='border-b border-stroke px-6.5 py-4 dark:border-strokedark'>
             <h3 className='text-title-md2 font-semibold text-black dark:text-white'>Add</h3>
           </div>
           <div className='p-6.5'>
@@ -128,7 +132,7 @@ export default function AddMatchSetting() {
       {/* end  */}
 
       <input
-        className='bg-primary text-gray mt-4 flex w-40 cursor-pointer justify-center rounded py-3 font-medium'
+        className='mt-4 flex w-40 cursor-pointer justify-center rounded bg-primary py-3 font-medium text-gray'
         type='submit'
       />
     </form>
@@ -152,7 +156,7 @@ function Round({ item, key, control, register, errors }: any) {
         return (
           <CardCollapse
             header={`Round ${index + 1}`}
-            className='round_list border border-indigo-600'
+            className='round_list border-indigo-600 border'
             key={item.id}
             handleDelete={() => remove(index)}
           >
@@ -267,14 +271,14 @@ function Round({ item, key, control, register, errors }: any) {
               />
             </div>
             {/* <MedalRates /> */}
-            <div className='border-stroke my-5 border-2'></div>
+            <div className='my-5 border-2 border-stroke'></div>
 
             <MetaRates nestIndex={index} {...{ control, register }} errors={errors} />
           </CardCollapse>
         )
       })}
       <button
-        className='bg-primary text-gray mt-2 mb-2 flex justify-center rounded p-3 font-medium'
+        className='mt-2 mb-2 flex justify-center rounded bg-primary p-3 font-medium text-gray'
         onClick={handleAddRound}
       >
         Add Round
@@ -353,7 +357,7 @@ const MetaRates = ({ nestIndex, control, register, errors }: any) => {
       })}
       <button
         type='button'
-        className='bg-primary text-gray mx-6 mt-2 mb-2 flex justify-center rounded p-3 font-medium'
+        className='mx-6 mt-2 mb-2 flex justify-center rounded bg-primary p-3 font-medium text-gray'
         onClick={() => append({})}
       >
         Add Metal Rate
