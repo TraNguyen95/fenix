@@ -83,7 +83,7 @@ const coreRoutes: any[] = [
   {
     path: '/campaigns/:id',
     title: 'DetailCampaign',
-    component: DetailCampaign
+    component: AddCampaign
   },
   {
     path: '/promotions/add',

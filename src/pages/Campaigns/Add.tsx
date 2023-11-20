@@ -1,37 +1,79 @@
-import { useContext } from 'react'
+import { yupResolver } from '@hookform/resolvers/yup'
+import { useContext, useEffect } from 'react'
 import { HelmetProvider, Helmet } from 'react-helmet-async'
 import { useForm } from 'react-hook-form'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import campaignsApi from 'src/apis/campaigns.api'
 import Input from 'src/components/ui/Input'
 import { MESSAGE } from 'src/constants/message'
 import { AppContext } from 'src/contexts/app.context'
 import { inputCustom } from 'src/utils/common.css'
-import { getRules } from 'src/utils/rules'
+import { convertToDateString } from 'src/utils/utils'
+import { formCampaignSchema } from 'src/utils/validation'
 
 function AddCampaign() {
   const { setLoading } = useContext(AppContext)
+  const params = useParams()
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm()
+    setValue
+  } = useForm({
+    resolver: yupResolver(formCampaignSchema)
+  })
   const navigate = useNavigate()
+  console.log(errors)
   const onSubmit = async (data: any) => {
-    console.log(data)
     try {
-      console.log(data)
-      // setLoading(true)
-      // const result = await campaignsApi.postCampaigns(data)
-      // if (result) {
-      //   toast.success(MESSAGE.CREATED_SUCCESS)
-      //   navigate('/campaigns')
-      // }
+      const conpaignType = [data.promotion && 'promotion_packages', data.quest && 'quests'].filter(Boolean)
+      const contentCampaign = conpaignType.map((c) => {
+        return { contentType: c }
+      })
+      const dataSend = { ...data, contentCampaign, status: 'false' }
+      delete dataSend.promotion
+      delete dataSend.quest
+
+      setLoading(true)
+      let result
+      if (params.id) {
+        result = await campaignsApi.putCampaigns(params.id, dataSend)
+        result && toast.success(MESSAGE.UPDATED_SUCCESS)
+      } else {
+        result = await campaignsApi.postCampaigns(dataSend)
+        result && toast.success(MESSAGE.CREATED_SUCCESS)
+      }
+
+      navigate('/campaigns')
     } catch (error) {
       setLoading(false)
     }
   }
+
+  const getCampaigns = async () => {
+    setLoading(true)
+    const result: any = await campaignsApi.getCampaign(params.id as string)
+    setValue('name', result.data.name)
+    setValue(
+      'promotion',
+      result.data.contentCampaign.find((c: any) => c.contentType === 'promotion_packages')
+    )
+    setValue(
+      'quest',
+      result.data.contentCampaign.find((c: any) => c.contentType === 'quests')
+    )
+    console.log(result.data.contentCampaign.find((c: any) => c.contentType === 'quests'))
+    setValue('fromDate', convertToDateString(result.data.fromDate))
+    setValue('toDate', convertToDateString(result.data.toDate))
+    setLoading(false)
+  }
+
+  useEffect(() => {
+    if (params.id) {
+      getCampaigns()
+    }
+  }, [])
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -50,13 +92,7 @@ function AddCampaign() {
         </div>
         <div className='border-b border-stroke py-4 px-6.5 dark:border-strokedark'>
           <label className='mb-3 block font-semibold text-black dark:text-white'>CampaignName:</label>
-          <Input
-            className={inputCustom}
-            register={register}
-            name='campaignName'
-            rules={getRules().RequiredCoinsItem}
-            errorMessage={errors.campaignName?.message}
-          />
+          <Input className={inputCustom} register={register} name='name' errorMessage={errors.name?.message} />
         </div>
 
         <div className='border-b border-stroke py-4 px-6.5 dark:border-strokedark'>
@@ -74,14 +110,12 @@ function AddCampaign() {
           /> */}
           <div className='flex gap-2'>
             <div className='flex gap-2'>
-              <label className='block font-semibold text-black dark:text-white'>Promotion</label>
+              <label className='block text-black dark:text-white'>Promotion</label>
               <input type='checkbox' {...register('promotion')} />
-              <p className='text-red-600 mt-2'>{errors.fromDate?.message as string}</p>
             </div>
             <div className='flex items-center gap-2'>
-              <label className='block font-semibold text-black dark:text-white'>Quest</label>
+              <label className='block text-black dark:text-white'>Quest</label>
               <input type='checkbox' {...register('quest')} />
-              <p className='text-red-600 mt-2'>{errors.fromDate?.message as string}</p>
             </div>
           </div>
         </div>
@@ -89,13 +123,13 @@ function AddCampaign() {
         <div className='border-b border-stroke py-4 px-6.5 dark:border-strokedark'>
           <label className='mb-3 block font-semibold text-black dark:text-white'>FromDate:</label>
           <input
-            {...register('fromDate', getRules().RequiredCoinsItem)}
+            {...register('fromDate')}
             type='date'
             className='custom-input-date custom-input-date-1 w-1/2 rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary'
           />
           <p className='text-red-600 mt-2'>{errors.fromDate?.message as string}</p>
         </div>
-        <div className='border-b border-stroke py-4 px-6.5 dark:border-strokedark'>
+        {/* <div className='border-b border-stroke py-4 px-6.5 dark:border-strokedark'>
           <label className='mb-3 block font-semibold text-black dark:text-white'>Point Range:</label>
           <Input
             className={inputCustom}
@@ -105,11 +139,11 @@ function AddCampaign() {
             errorMessage={errors.pointRange?.message}
             type='number'
           />
-        </div>
+        </div> */}
         <div className='border-b border-stroke py-4 px-6.5 dark:border-strokedark'>
           <label className='mb-3 block font-semibold text-black dark:text-white'>ToDate:</label>
           <input
-            {...register('toDate', getRules().RequiredCoinsItem)}
+            {...register('toDate')}
             type='date'
             className='custom-input-date custom-input-date-1 w-1/2 rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary'
           />

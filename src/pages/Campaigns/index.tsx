@@ -11,6 +11,7 @@ import { convertToDateString } from 'src/utils/utils'
 
 function Campaigns() {
   const [isDelete, setIsDelete] = useState<boolean>(false)
+  const [isChangeStatus, setIsChangeStatus] = useState<boolean>(false)
   const { setLoading } = useContext(AppContext)
 
   const [searchParams, setSearchParams] = useSearchParams()
@@ -24,7 +25,7 @@ function Campaigns() {
   }
   useEffect(() => {
     geCampaigns()
-  }, [currentPage, isDelete])
+  }, [currentPage, isDelete, isChangeStatus])
 
   if (!campaigns) return
   return (
@@ -41,6 +42,8 @@ function Campaigns() {
         setIsDelete={setIsDelete}
         setSearchParams={setSearchParams}
         isDelete={isDelete}
+        setIsChangeStatus={setIsChangeStatus}
+        isChangeStatus={isChangeStatus}
       />
     </div>
   )
@@ -52,7 +55,7 @@ const TableCampaigns = (props: any) => {
   console.log(props.list)
   const { setLoading } = useContext(AppContext)
 
-  const PAGE_SIZE = 3
+  const PAGE_SIZE = 10
   const handlePage = (page: number) => {
     props.setSearchParams({ page })
   }
@@ -69,6 +72,13 @@ const TableCampaigns = (props: any) => {
     } catch (error) {
       setLoading(false)
     }
+  }
+  const handleChangeStatus = async (id: string, status: boolean) => {
+    console.log(id)
+    if (status) return
+    const result = await campaignsApi.putCampaigns(id, { status: true })
+    result && toast.success(MESSAGE.UPDATED_SUCCESS)
+    props.setIsChangeStatus(!props.isChangeStatus)
   }
   return (
     <div className='rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1'>
@@ -88,24 +98,19 @@ const TableCampaigns = (props: any) => {
               <th className='min-w-[220px] py-4 px-4 font-semibold text-black dark:text-white xl:pl-11'>
                 Campaign Name
               </th>
-              <th className='min-w-[150px] py-4 px-4 font-semibold text-black dark:text-white'>Campaign Type</th>
               <th className='min-w-[120px] py-4 px-4 font-semibold text-black dark:text-white'>FromDate</th>
               <th className='min-w-[120px] py-4 px-4 font-semibold text-black dark:text-white'>To Date</th>
+              <th className='min-w-[120px] py-4 px-4 font-semibold text-black dark:text-white'>Status</th>
               <th className='py-4 px-4 font-semibold text-black dark:text-white'>Actions</th>
             </tr>
           </thead>
           <tbody>
-            {props.list?.map((item: any, index: number) => {
+            {props.list?.map((item: any) => {
               return (
                 <tr key={item._id}>
                   <td className='border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11'>
                     <p className='inline-flex rounded-full bg-success bg-opacity-10 py-1 px-3 text-sm font-medium text-success'>
-                      {item.campaignName}
-                    </p>
-                  </td>
-                  <td className='border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11'>
-                    <p className='inline-flex rounded-full bg-success bg-opacity-10 py-1 px-3 text-sm font-medium text-success'>
-                      {item.campaignType}
+                      {item.name}
                     </p>
                   </td>
                   <td className='border-b border-[#eee] py-5 px-4 dark:border-strokedark'>
@@ -116,6 +121,16 @@ const TableCampaigns = (props: any) => {
                   <td className='border-b border-[#eee] py-5 px-4 dark:border-strokedark'>
                     <p className='inline-flex rounded-full bg-success bg-opacity-10 py-1 px-3 text-sm font-medium text-success'>
                       {convertToDateString(item.toDate)}
+                    </p>
+                  </td>
+                  <td className='border-b border-[#eee] py-5 px-4 dark:border-strokedark'>
+                    <p className='inline-flex rounded-full bg-success bg-opacity-10 py-1 px-3 text-sm font-medium text-success'>
+                      <input
+                        checked={item.status}
+                        type='checkbox'
+                        className='text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:bg-gray-700 dark:border-gray-600 h-4 w-4 rounded focus:ring-2'
+                        onChange={() => handleChangeStatus(item._id, item.status)}
+                      />
                     </p>
                   </td>
                   <td className='border-b border-[#eee] py-5 px-4 dark:border-strokedark'>
