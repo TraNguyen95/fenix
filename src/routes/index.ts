@@ -1,7 +1,8 @@
 import { lazy } from 'react'
 import Campaigns from 'src/pages/Campaigns'
-import AddCampaign from 'src/pages/Campaigns/Add'
-import DetailCampaign from 'src/pages/Campaigns/detail'
+import DetailCampaign from 'src/pages/Campaigns/Detail'
+import DailyBonusConfig from 'src/pages/DailyBonusConfig'
+import DetailDailyBoususConfig from 'src/pages/DailyBonusConfig/Detail'
 import MatchMakings from 'src/pages/MatchMakings'
 import AddMatchMaking from 'src/pages/MatchMakings/Add'
 import DeailMatchMaking from 'src/pages/MatchMakings/detail'
@@ -18,11 +19,33 @@ import DetailQuest from 'src/pages/Quest/detail'
 import RankTier from 'src/pages/RankTiers'
 import AddRankTier from 'src/pages/RankTiers/Add'
 import RankTierDetail from 'src/pages/RankTiers/detail'
+import ListShop from 'src/pages/Shop'
+import DetailShop from 'src/pages/Shop/Detail'
 
 const FormElements = lazy(() => import('../pages/Form/FormElements'))
 const FormLayout = lazy(() => import('../pages/Form/FormLayout'))
 const Alerts = lazy(() => import('../pages/UiElements/Alerts'))
 const Buttons = lazy(() => import('../pages/UiElements/Buttons'))
+
+function groupRoute(colectionName: string, components: any[]) {
+  return [
+    {
+      path: `/${colectionName}`,
+      title: 'colectionName',
+      component: components[0]
+    },
+    {
+      path: `/${colectionName}/add`,
+      title: 'colectionName',
+      component: components[1]
+    },
+    {
+      path: `/${colectionName}/:id`,
+      title: 'colectionName',
+      component: components[1]
+    }
+  ]
+}
 
 const coreRoutes: any[] = [
   {
@@ -70,40 +93,13 @@ const coreRoutes: any[] = [
     title: 'AddMatchMaking',
     component: AddMatchMaking
   },
-  {
-    path: '/campaigns',
-    title: 'Campaigns',
-    component: Campaigns
-  },
-  {
-    path: '/campaigns/add',
-    title: 'AddCampaigns',
-    component: AddCampaign
-  },
-  {
-    path: '/campaigns/:id',
-    title: 'DetailCampaign',
-    component: AddCampaign
-  },
-  {
-    path: '/promotions/add',
-    title: 'Promotions',
-    component: AddPromotion
-  },
+  ...groupRoute('campaigns', [Campaigns, DetailCampaign]),
+  ...groupRoute('promotions', [ListPromotions, DetailPromotion]),
+  ...groupRoute('shops', [ListShop, DetailShop]),
   {
     path: '/promotions/add-renew',
     title: 'Promotions',
     component: AddPromotionRenew
-  },
-  {
-    path: '/promotions/:id',
-    title: 'Promotions',
-    component: DetailPromotion
-  },
-  {
-    path: '/promotions',
-    title: 'Promotions',
-    component: ListPromotions
   },
   {
     path: '/quest',
@@ -120,6 +116,7 @@ const coreRoutes: any[] = [
     title: 'detail-quests',
     component: DetailQuest
   },
+  ...groupRoute('daily-bonus-config', [DailyBonusConfig, DetailDailyBoususConfig]),
   {
     path: '/forms/form-elements',
     title: 'Forms Elements',

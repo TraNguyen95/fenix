@@ -18,7 +18,7 @@ export default function SelectOption({
   options: option[]
   register: any
   name: string
-  rules: any
+  rules?: any
   errorMessage?: string
   values?: string
   defaultV?: string
