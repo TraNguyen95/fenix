@@ -49,9 +49,10 @@ function DetailShop() {
   const getShop = async () => {
     setLoading(true)
     const result: any = await shopApi.getShop(params.id as string)
+    console.log(result);
     setValue('campaignId', result.data.campaignId)
-    setValue('price', convertToDateString(result.data.price))
-    setValue('pplAmount', convertToDateString(result.data.pplAmount))
+    setValue('price', result.data.price)
+    setValue('pplAmount', result.data.pplAmount)
     setLoading(false)
   }
 

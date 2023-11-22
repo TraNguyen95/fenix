@@ -14,7 +14,7 @@ const formCampaignSchema = yup.object({
 const formShopSchema = yup.object({
   campaignId: yup.string().required('campaignId is required'),
   price: yup.string().required('price is required'),
-  pplAmount: yup.string().required('pplAmount is required'),
+  pplAmount: yup.string().required('pplAmount is required')
 })
 
 const bonusSchema = {

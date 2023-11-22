@@ -7,7 +7,6 @@ import IconDelete from 'src/components/ui/IconDelete'
 import { MESSAGE } from 'src/constants/message'
 import { AppContext } from 'src/contexts/app.context'
 import ButtonWithIcon from '../UiElements/ButtonWithIcon'
-import { convertToDateString } from 'src/utils/utils'
 import shopApi from 'src/apis/shop.api'
 
 function ListShop() {
@@ -32,13 +31,13 @@ function ListShop() {
   return (
     <div>
       <div className='mb-4 flex items-center justify-between'>
-        <span className='text-title-md2 font-semibold text-black'>Campaigns</span>
+        <span className='text-title-md2 font-semibold text-black'>Shops</span>
         <ButtonWithIcon name='Add New' className='mb-5 mt-5' path={`add`} />
       </div>
 
       <TableShop
         list={shops.shops}
-        total={shops.numberOfCampaign}
+        total={shops.numberOfShops}
         currentPage={currentPage}
         setIsDelete={setIsDelete}
         setSearchParams={setSearchParams}
@@ -65,7 +64,7 @@ const TableShop = (props: any) => {
     const conf = confirm(MESSAGE.ARE_SURE_DELETE)
     if (!conf) return
     try {
-      const result = await campaignsApi.deleteCampaigns(id)
+      const result = await shopApi.deleteShop(id)
       if (result) {
         toast.success(MESSAGE.DELETED_SUCCESS)
         props.setIsDelete(!props.isDelete)
@@ -74,12 +73,11 @@ const TableShop = (props: any) => {
       setLoading(false)
     }
   }
-  const handleChangeStatus = async (id: string, status: boolean) => {
-    console.log(id)
-    if (status) return
-    const result = await campaignsApi.putCampaigns(id, { status: true })
-    result && toast.success(MESSAGE.UPDATED_SUCCESS)
-    props.setIsChangeStatus(!props.isChangeStatus)
+  const handleChangeOrder = async (id: string, order: string) => {
+    const res: any = await shopApi.putShop(id, { order })
+    if (res.success) {
+      props.setIsDelete(!props.isDelete)
+    }
   }
   return (
     <div className='rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1'>
@@ -97,8 +95,9 @@ const TableShop = (props: any) => {
           <thead>
             <tr className='bg-gray-2 text-left dark:bg-meta-4'>
               <th className='min-w-[220px] py-4 px-4 font-semibold text-black dark:text-white xl:pl-11'>campaignId</th>
-              <th className='min-w-[120px] py-4 px-4 font-semibold text-black dark:text-white'>totalRenec</th>
-              <th className='min-w-[120px] py-4 px-4 font-semibold text-black dark:text-white'>claimedRenec</th>
+              <th className='min-w-[120px] py-4 px-4 font-semibold text-black dark:text-white'>price</th>
+              <th className='min-w-[120px] py-4 px-4 font-semibold text-black dark:text-white'>pplAmount</th>
+              <th className='min-w-[120px] py-4 px-4 font-semibold text-black dark:text-white'>Order</th>
               <th className='py-4 px-4 font-semibold text-black dark:text-white'>Actions</th>
             </tr>
           </thead>
@@ -113,13 +112,21 @@ const TableShop = (props: any) => {
                   </td>
                   <td className='border-b border-[#eee] py-5 px-4 dark:border-strokedark'>
                     <p className='inline-flex rounded-full bg-success bg-opacity-10 py-1 px-3 text-sm font-medium text-success'>
-                      {item.totalRenec}
+                      {item.price}
                     </p>
                   </td>
                   <td className='border-b border-[#eee] py-5 px-4 dark:border-strokedark'>
                     <p className='inline-flex rounded-full bg-success bg-opacity-10 py-1 px-3 text-sm font-medium text-success'>
-                      {item.claimedRenec}
+                      {item.pplAmount}
                     </p>
+                  </td>
+                  <td className='border-b border-[#eee] py-5 px-4 dark:border-strokedark'>
+                    <input
+                      type='text'
+                      defaultValue={item.order}
+                      className='bg-gray-50 border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500 block w-[50px] rounded-lg border px-2.5 py-1 text-sm dark:text-white'
+                      onBlur={(e) => handleChangeOrder(item._id, e.target.value)}
+                    />
                   </td>
                   <td className='border-b border-[#eee] py-5 px-4 dark:border-strokedark'>
                     <div className='flex items-center space-x-3.5'>

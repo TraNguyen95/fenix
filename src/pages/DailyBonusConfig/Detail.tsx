@@ -70,7 +70,6 @@ function DetailDailyBoususConfig() {
     })
     setCampaigns(campaignFilter)
   }
-  console.log('campaign', campaigns)
 
   useEffect(() => {
     if (params.id) {

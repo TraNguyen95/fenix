@@ -4,7 +4,7 @@ const SHOPS = 'shops'
 
 const shopApi = {
   getShops(currentPage = 1, searchP = '') {
-    return http.get<any>(SHOPS + '/campaign/items' + '?page=' + currentPage + '&search=' + searchP)
+    return http.get<any>(SHOPS + '?page=' + currentPage + '&search=' + searchP)
   },
   postShop(data: any) {
     return http.post<any>(SHOPS, data)

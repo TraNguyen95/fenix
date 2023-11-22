@@ -67,7 +67,7 @@ const TableCampaigns = (props: any) => {
     const conf = confirm(MESSAGE.ARE_SURE_DELETE)
     if (!conf) return
     try {
-      const result = await campaignsApi.deleteCampaigns(id)
+      const result = await dailyBonusConfigApi.deleteDailyBonus(id)
       if (result) {
         toast.success(MESSAGE.DELETED_SUCCESS)
         props.setIsDelete(!props.isDelete)
@@ -75,13 +75,6 @@ const TableCampaigns = (props: any) => {
     } catch (error) {
       setLoading(false)
     }
-  }
-  const handleChangeStatus = async (id: string, status: boolean) => {
-    console.log(id)
-    if (status) return
-    const result = await campaignsApi.putCampaigns(id, { status: true })
-    result && toast.success(MESSAGE.UPDATED_SUCCESS)
-    props.setIsChangeStatus(!props.isChangeStatus)
   }
   return (
     <div className='rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1'>
